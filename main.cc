@@ -20,7 +20,7 @@ int main() {
   command_history = {"dgdg", "hell", "hdfdf"};
 
   std::function<void(void)> check_command_history_emptiness{
-      [command_history]() {
+      [&command_history = std::as_const(command_history)]() {
         fplus::fwd::apply(
             command_history, fplus::fwd::is_empty(), [](const bool &arg) {
               if (arg) std::cout << "No commands in history.." << std::endl;
