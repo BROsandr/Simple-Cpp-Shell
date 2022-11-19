@@ -48,14 +48,19 @@ int main() {
 
     std::cout << fplus::fwd::apply(
         fplus::zip(
-            fplus::fwd::apply(
-                command_history,
-                fplus::fwd::transform(fplus::fwd::prepend_elem(':'))),
             fplus::fwd::apply(command_history, fplus::fwd::size_of_cont(),
                               fplus::add_to<long long unsigned>(1),
-                              fplus::fwd::numbers<long long unsigned>(1))),
+                              fplus::fwd::numbers<long long unsigned>(1)),
+    fplus::fwd::apply(
+        command_history,
+        fplus::fwd::transform(fplus::fwd::prepend_elem(':')))),
+
         fplus::fwd::take_last(10),
         fplus::fwd::reverse(),
+        fplus::fwd::transform(
+            [](const auto &arg) {
+              return fplus::show(fplus::fst(arg)) + fplus::snd(arg);
+            }),
         fplus::fwd::show());
   }
 }
