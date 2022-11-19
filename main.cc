@@ -72,6 +72,16 @@ int main() {
       command_to_execute = (fplus::is_empty(command_history))
                                ? ""
                                : fplus::last(command_history);
+    } else if (std::string command_to_execute;
+               fplus::fwd::apply(input_split, fplus::fwd::head(),
+                                 fplus::fwd::get_segment(0, 1),
+                                 fplus::fwd::is_equal(std::string{"!"}))) {
+      if (fplus::fwd::apply(
+              input_split, fplus::fwd::head(), fplus::fwd::elem_at_idx(1),
+              fplus::is_greater_than(fplus::elem_at_idx(
+                  0, fplus::show(fplus::size_of_cont(command_history)))))) {
+        std::cout << "here";
+      }
     }
   }
 }
