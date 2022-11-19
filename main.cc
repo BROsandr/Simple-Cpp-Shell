@@ -17,6 +17,11 @@ void exit() { std::exit(EXIT_SUCCESS); }
 int main() {
   std::vector<std::string> entered_input;
   std::vector<std::string> command_history;
+  command_history = {
+      "dgdg",
+      "hell",
+      "hdfdf"
+  };
 
   while (true) {
     print_prompt();
@@ -30,8 +35,35 @@ int main() {
                         if (fplus::is_not_empty(arg)) shell::exit();
                       });
 
-    std::cout << fplus::fwd::apply(
+    auto shell_command{fplus::fwd::apply(
         input_split, fplus::fwd::keep_if(fplus::fwd::is_not_equal(std::string{"history"})),
-        fplus::fwd::drop_if(fplus::fwd::is_prefix_of(std::string{"!"})), fplus::fwd::show());
+        fplus::fwd::drop_if(fplus::fwd::is_prefix_of(std::string{"!"})), fplus::fwd::show())};
+
+    fplus::fwd::apply(
+        command_history,
+        fplus::fwd::is_empty(),
+        [](const auto &) {
+          std::cout << "No command in history.." << std::endl;
+        });
+
+//    std::cout << fplus::fwd::apply(
+//        command_history,
+//        fplus::fwd::transform(fplus::fwd::prepend_elem(':')),
+//        fplus::fwd::zip(fplus::numbers)
+//        fplus::fwd::enumerate(),
+//        fplus::fwd::take_last(10),
+//        fplus::fwd::reverse(), fplus::fwd::show() );
+//  }
+
+    std::cout << fplus::fwd::apply(
+        fplus::zip(
+            fplus::fwd::apply(
+                command_history,
+                fplus::fwd::transform(fplus::fwd::prepend_elem(':'))),
+            fplus::fwd::apply(command_history, fplus::fwd::size_of_cont(),
+                              fplus::add_to<long long unsigned>(1),
+                              fplus::fwd::numbers<long long unsigned>(1))),
+        fplus::fwd::show());
   }
 }
+
