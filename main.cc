@@ -22,7 +22,7 @@ int main() {
     print_prompt();
 
     auto input_split{
-        fplus::fwd::apply(get_input(), fplus::fwd::split_words(false))};
+        fplus::fwd::apply(get_input(), fplus::fwd::split_one_of(std::string{" "}, false))};
 
     fplus::fwd::apply(input_split, fplus::fwd::take(1),
                       fplus::fwd::keep_if(fplus::fwd::is_equal(std::string{"exit"})),
