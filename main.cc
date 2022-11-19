@@ -58,6 +58,10 @@ int main() {
             return fplus::show(fplus::fst(arg)) + fplus::snd(arg);
           }),
           fplus::fwd::show());
+    } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
+                                 fplus::fwd::get_segment(0, 2),
+                                 fplus::fwd::is_equal(std::string{"!!"}))) {
+      std::cout << "here";
     }
   }
 }
