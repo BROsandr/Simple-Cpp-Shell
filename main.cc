@@ -30,8 +30,8 @@ int main() {
                         if (fplus::is_not_empty(arg)) shell::exit();
                       });
 
-    std::cout << fplus::show(fplus::fwd::apply(
+    std::cout << fplus::fwd::apply(
         input_split, fplus::fwd::keep_if(fplus::fwd::is_not_equal(std::string{"history"})),
-        fplus::fwd::drop_if(fplus::fwd::is_prefix_of(std::string{"!"}))));
+        fplus::fwd::drop_if(fplus::fwd::is_prefix_of(std::string{"!"})), fplus::fwd::show());
   }
 }
