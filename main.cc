@@ -22,8 +22,8 @@ int main() {
   std::function<void(void)> check_command_history_emptiness{
       [command_history]() {
         fplus::fwd::apply(
-            command_history, fplus::fwd::is_empty(), [](const auto &) {
-              std::cout << "No commands in history.." << std::endl;
+            command_history, fplus::fwd::is_empty(), [](const bool &arg) {
+              if (arg) std::cout << "No commands in history.." << std::endl;
             });
       }};
 
@@ -35,7 +35,7 @@ int main() {
 
     fplus::fwd::apply(input_split, fplus::fwd::head(),
                       fplus::fwd::is_equal(std::string{"exit"}),
-                      [](const auto &arg) {
+                      [](const bool &arg) {
                         if (arg) shell::exit();
                       });
 
