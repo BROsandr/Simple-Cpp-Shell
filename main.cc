@@ -19,10 +19,18 @@ int main() {
   std::vector<std::string> command_history;
   command_history = {"dgdg", "hell", "hdfdf"};
 
+  std::function<void(void)> check_command_history_emptiness{
+      [command_history]() {
+        fplus::fwd::apply(
+            command_history, fplus::fwd::is_empty(), [](const auto &) {
+              std::cout << "No commands in history.." << std::endl;
+            });
+      }};
+
   while (true) {
     print_prompt();
 
-    auto input_split{fplus::fwd::apply(
+    std::vector<std::string> input_split{fplus::fwd::apply(
         get_input(), fplus::fwd::split_one_of(std::string{" "}, false))};
 
     fplus::fwd::apply(input_split, fplus::fwd::head(),
@@ -39,10 +47,7 @@ int main() {
 
     if (fplus::fwd::apply(input_split, fplus::fwd::head(),
                           fplus::fwd::is_equal(std::string{"history"}))) {
-      fplus::fwd::apply(command_history, fplus::fwd::is_empty(),
-                        [](const auto &) {
-                          std::cout << "No command in history.." << std::endl;
-                        });
+      check_command_history_emptiness();
 
       std::cout << fplus::fwd::apply(
           fplus::zip(
@@ -61,7 +66,7 @@ int main() {
     } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 2),
                                  fplus::fwd::is_equal(std::string{"!!"}))) {
-      std::cout << "here";
+      check_command_history_emptiness();
     }
   }
 }
