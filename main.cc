@@ -38,6 +38,10 @@ int main() {
         get_input(),
         fplus::fwd::split_one_of(std::string{" "}, false))};
 
+    if (!fplus::size_of_cont(input_split)) {
+      continue;
+    }
+
     fplus::fwd::apply(input_split,
                       fplus::fwd::head(),
                       fplus::fwd::is_equal(std::string{"exit"}),
@@ -70,44 +74,44 @@ int main() {
           fplus::fwd::show_cont_with_frame("\n", "", ""));
       if (fplus::is_not_empty(command_history))
         std::cout << std::endl;
-    } else if (fplus::fwd::apply(input_split,
+    } else {
+      if (fplus::fwd::apply(input_split,
                                  fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 2),
                                  fplus::fwd::is_equal(std::string{"!!"}))) {
-      check_command_history_emptiness();
+        check_command_history_emptiness();
 
-      command_to_execute = (fplus::is_empty(command_history))
-                           ? ""
-                           : fplus::last(command_history);
-    } else if (fplus::fwd::apply(input_split,
-                                 fplus::fwd::head(),
-                                 fplus::fwd::get_segment(0, 1),
-                                 fplus::fwd::is_equal(std::string{"!"}))) {
-      if (fplus::fwd::apply(
-          input_split,
-          fplus::fwd::head(),
-          fplus::fwd::get_segment(
-              1, fplus::size_of_cont(fplus::head(input_split))),
-          fplus::fwd::read_value_with_default<unsigned long long>(-1),
-          fplus::fwd::is_in_closed_interval<unsigned long long>(
-              1, fplus::size_of_cont(command_history)))) {
-        command_to_execute = fplus::fwd::apply(
+        command_to_execute = (fplus::is_empty(command_history))
+                             ? ""
+                             : fplus::last(command_history);
+      } else if (fplus::fwd::apply(input_split,
+                                   fplus::fwd::head(),
+                                   fplus::fwd::get_segment(0, 1),
+                                   fplus::fwd::is_equal(std::string{"!"}))) {
+        if (fplus::fwd::apply(
             input_split,
             fplus::fwd::head(),
             fplus::fwd::get_segment(
                 1, fplus::size_of_cont(fplus::head(input_split))),
             fplus::fwd::read_value_with_default<unsigned long long>(-1),
-            fplus::subtract(1),
-            fplus::fwd::flip::elem_at_idx(command_history));
+            fplus::fwd::is_in_closed_interval<unsigned long long>(
+                1, fplus::size_of_cont(command_history)))) {
+          command_to_execute = fplus::fwd::apply(
+              input_split,
+              fplus::fwd::head(),
+              fplus::fwd::get_segment(
+                  1, fplus::size_of_cont(fplus::head(input_split))),
+              fplus::fwd::read_value_with_default<unsigned long long>(-1),
+              fplus::subtract(1),
+              fplus::fwd::flip::elem_at_idx(command_history));
+        } else {
+          std::cout << "No such command in command history" << std::endl;
+        }
       } else {
-        std::cout << "No such command in command history" << std::endl;
+        command_to_execute = fplus::join(std::string{' '}, input_split);
       }
-    } else {
-      command_to_execute = fplus::join(std::string{' '}, input_split);
-    }
-    std::cout << (fplus::size_of_cont(command_to_execute) ? fplus::append(command_to_execute, std::string{"\n"})
-                                                          : command_to_execute);
-    if (fplus::size_of_cont(command_to_execute))
+      std::cout << fplus::append(command_to_execute, std::string{"\n"});
       command_history = fplus::append(command_history, std::vector<std::string>{command_to_execute});
+    }
   }
 }
