@@ -95,6 +95,7 @@ int main() {
     }
     std::cout << (fplus::size_of_cont(command_to_execute) ? fplus::append(command_to_execute, std::string{"\n"})
                                                           : command_to_execute);
-    command_history = fplus::append(command_history, std::vector<std::string>{command_to_execute});
+    if (fplus::size_of_cont(command_to_execute))
+      command_history = fplus::append(command_history, std::vector<std::string>{command_to_execute});
   }
 }
