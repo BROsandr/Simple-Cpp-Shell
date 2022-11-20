@@ -11,7 +11,10 @@ std::string get_input() {
 }
 
 namespace shell {
-void exit() { std::exit(EXIT_SUCCESS); }
+void exit() {
+  std::cout << "Exiting";
+  std::exit(EXIT_SUCCESS);
+}
 } // namespace shell
 
 int main() {
