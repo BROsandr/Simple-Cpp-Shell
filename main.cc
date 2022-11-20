@@ -89,6 +89,8 @@ int main() {
             fplus::fwd::read_value_with_default<unsigned long long>(-1),
             fplus::subtract(1),
             fplus::fwd::flip::elem_at_idx(command_history));
+      } else {
+        std::cout << "No such command in command history" << std::endl;
       }
     } else {
       command_to_execute = fplus::join(std::string{' '}, input_split);
