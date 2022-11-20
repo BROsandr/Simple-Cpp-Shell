@@ -77,9 +77,12 @@ int main() {
                                  fplus::fwd::get_segment(0, 1),
                                  fplus::fwd::is_equal(std::string{"!"}))) {
       if (fplus::fwd::apply(
-              input_split, fplus::fwd::head(), fplus::fwd::elem_at_idx(1),
-              fplus::is_greater_than(fplus::elem_at_idx(
-                  0, fplus::show(fplus::size_of_cont(command_history)))))) {
+              input_split, fplus::fwd::head(),
+              fplus::fwd::get_segment(
+                  1, fplus::size_of_cont(fplus::head(input_split))),
+              fplus::fwd::read_value_with_default<unsigned long long>(-1),
+              fplus::fwd::is_in_closed_interval<unsigned long long>(
+                  1, fplus::size_of_cont(command_history)))) {
         std::cout << "here";
       }
     }
