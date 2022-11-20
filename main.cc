@@ -55,9 +55,9 @@ int main() {
       std::cout << fplus::fwd::apply(
           fplus::zip(
               fplus::fwd::apply(command_history,
-                                    fplus::fwd::size_of_cont(),
-                                    fplus::add_to<long long unsigned>(1),
-                                    fplus::fwd::numbers<long long unsigned>(1)),
+                                fplus::fwd::size_of_cont(),
+                                fplus::add_to<long long unsigned>(1),
+                                fplus::fwd::numbers<long long unsigned>(1)),
               fplus::fwd::apply(
                   command_history,
                   fplus::fwd::transform(fplus::fwd::prepend_elem(':')))),
