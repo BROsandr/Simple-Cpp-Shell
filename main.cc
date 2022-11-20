@@ -23,7 +23,9 @@ int main() {
   std::function<void(void)> check_command_history_emptiness{
       [&command_history = std::as_const(command_history)]() {
         fplus::fwd::apply(
-            command_history, fplus::fwd::is_empty(), [](const bool &arg) {
+            command_history,
+            fplus::fwd::is_empty(),
+            [](const bool &arg) {
               if (arg)
                 std::cout << "No commands in history.." << std::endl;
             });
@@ -33,9 +35,11 @@ int main() {
     print_prompt();
 
     std::vector<std::string> input_split{fplus::fwd::apply(
-        get_input(), fplus::fwd::split_one_of(std::string{" "}, false))};
+        get_input(),
+        fplus::fwd::split_one_of(std::string{" "}, false))};
 
-    fplus::fwd::apply(input_split, fplus::fwd::head(),
+    fplus::fwd::apply(input_split,
+                      fplus::fwd::head(),
                       fplus::fwd::is_equal(std::string{"exit"}),
                       [](const bool &arg) {
                         if (arg)
@@ -43,27 +47,31 @@ int main() {
                       });
 
     std::string command_to_execute;
-    if (fplus::fwd::apply(input_split, fplus::fwd::head(),
+    if (fplus::fwd::apply(input_split,
+                          fplus::fwd::head(),
                           fplus::fwd::is_equal(std::string{"history"}))) {
       check_command_history_emptiness();
 
       std::cout << fplus::fwd::apply(
           fplus::zip(
-              fplus::fwd::apply(command_history, fplus::fwd::size_of_cont(),
-                                fplus::add_to<long long unsigned>(1),
-                                fplus::fwd::numbers<long long unsigned>(1)),
+              fplus::fwd::apply(command_history,
+                                    fplus::fwd::size_of_cont(),
+                                    fplus::add_to<long long unsigned>(1),
+                                    fplus::fwd::numbers<long long unsigned>(1)),
               fplus::fwd::apply(
                   command_history,
                   fplus::fwd::transform(fplus::fwd::prepend_elem(':')))),
 
-          fplus::fwd::take_last(10), fplus::fwd::reverse(),
+          fplus::fwd::take_last(10),
+          fplus::fwd::reverse(),
           fplus::fwd::transform([](const auto &arg) {
             return fplus::show(fplus::fst(arg)) + fplus::snd(arg);
           }),
           fplus::fwd::show_cont_with_frame("\n", "", ""));
       if (fplus::is_not_empty(command_history))
         std::cout << std::endl;
-    } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
+    } else if (fplus::fwd::apply(input_split,
+                                 fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 2),
                                  fplus::fwd::is_equal(std::string{"!!"}))) {
       check_command_history_emptiness();
@@ -71,18 +79,21 @@ int main() {
       command_to_execute = (fplus::is_empty(command_history))
                            ? ""
                            : fplus::last(command_history);
-    } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
+    } else if (fplus::fwd::apply(input_split,
+                                 fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 1),
                                  fplus::fwd::is_equal(std::string{"!"}))) {
       if (fplus::fwd::apply(
-          input_split, fplus::fwd::head(),
+          input_split,
+          fplus::fwd::head(),
           fplus::fwd::get_segment(
               1, fplus::size_of_cont(fplus::head(input_split))),
           fplus::fwd::read_value_with_default<unsigned long long>(-1),
           fplus::fwd::is_in_closed_interval<unsigned long long>(
               1, fplus::size_of_cont(command_history)))) {
         command_to_execute = fplus::fwd::apply(
-            input_split, fplus::fwd::head(),
+            input_split,
+            fplus::fwd::head(),
             fplus::fwd::get_segment(
                 1, fplus::size_of_cont(fplus::head(input_split))),
             fplus::fwd::read_value_with_default<unsigned long long>(-1),
