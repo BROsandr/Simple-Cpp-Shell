@@ -12,7 +12,7 @@ std::string get_input() {
 
 namespace shell {
 void exit() { std::exit(EXIT_SUCCESS); }
-}  // namespace shell
+} // namespace shell
 
 int main() {
   std::vector<std::string> entered_input;
@@ -23,7 +23,8 @@ int main() {
       [&command_history = std::as_const(command_history)]() {
         fplus::fwd::apply(
             command_history, fplus::fwd::is_empty(), [](const bool &arg) {
-              if (arg) std::cout << "No commands in history.." << std::endl;
+              if (arg)
+                std::cout << "No commands in history.." << std::endl;
             });
       }};
 
@@ -36,7 +37,8 @@ int main() {
     fplus::fwd::apply(input_split, fplus::fwd::head(),
                       fplus::fwd::is_equal(std::string{"exit"}),
                       [](const bool &arg) {
-                        if (arg) shell::exit();
+                        if (arg)
+                          shell::exit();
                       });
 
     auto shell_command{fplus::fwd::apply(
@@ -64,25 +66,25 @@ int main() {
           }),
           fplus::fwd::show());
     } else if (std::string command_to_execute;
-               fplus::fwd::apply(input_split, fplus::fwd::head(),
-                                 fplus::fwd::get_segment(0, 2),
-                                 fplus::fwd::is_equal(std::string{"!!"}))) {
+        fplus::fwd::apply(input_split, fplus::fwd::head(),
+                          fplus::fwd::get_segment(0, 2),
+                          fplus::fwd::is_equal(std::string{"!!"}))) {
       check_command_history_emptiness();
 
       command_to_execute = (fplus::is_empty(command_history))
-                               ? ""
-                               : fplus::last(command_history);
+                           ? ""
+                           : fplus::last(command_history);
     } else if (std::string command_to_execute;
-               fplus::fwd::apply(input_split, fplus::fwd::head(),
-                                 fplus::fwd::get_segment(0, 1),
-                                 fplus::fwd::is_equal(std::string{"!"}))) {
+        fplus::fwd::apply(input_split, fplus::fwd::head(),
+                          fplus::fwd::get_segment(0, 1),
+                          fplus::fwd::is_equal(std::string{"!"}))) {
       if (fplus::fwd::apply(
-              input_split, fplus::fwd::head(),
-              fplus::fwd::get_segment(
-                  1, fplus::size_of_cont(fplus::head(input_split))),
-              fplus::fwd::read_value_with_default<unsigned long long>(-1),
-              fplus::fwd::is_in_closed_interval<unsigned long long>(
-                  1, fplus::size_of_cont(command_history)))) {
+          input_split, fplus::fwd::head(),
+          fplus::fwd::get_segment(
+              1, fplus::size_of_cont(fplus::head(input_split))),
+          fplus::fwd::read_value_with_default<unsigned long long>(-1),
+          fplus::fwd::is_in_closed_interval<unsigned long long>(
+              1, fplus::size_of_cont(command_history)))) {
         std::cout << "here";
       }
     }
