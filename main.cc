@@ -72,7 +72,7 @@ int main() {
 
       command_to_execute = (fplus::is_empty(command_history))
                            ? ""
-                           : fplus::last(command_history);
+                           : fplus::append(fplus::last(command_history), std::string{"\n"});
     } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 1),
                                  fplus::fwd::is_equal(std::string{"!"}))) {
@@ -89,7 +89,7 @@ int main() {
                 1, fplus::size_of_cont(fplus::head(input_split))),
             fplus::fwd::read_value_with_default<unsigned long long>(-1),
             fplus::subtract(1),
-            fplus::fwd::flip::elem_at_idx(command_history));
+            fplus::fwd::flip::elem_at_idx(command_history), fplus::fwd::flip::append(std::string{"\n"}));
       }
     } else {
       command_to_execute = fplus::join(std::string{' '}, fplus::append(input_split, std::vector<std::string>{"\n"}));
