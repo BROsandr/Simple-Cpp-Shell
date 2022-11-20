@@ -42,11 +42,6 @@ int main() {
                           shell::exit();
                       });
 
-    auto shell_command{fplus::fwd::apply(
-        input_split,
-        fplus::fwd::keep_if(fplus::fwd::is_not_equal(std::string{"history"})),
-        fplus::fwd::drop_if(fplus::fwd::is_prefix_of(std::string{"!"})),
-        fplus::fwd::show())};
     std::string command_to_execute;
     if (fplus::fwd::apply(input_split, fplus::fwd::head(),
                           fplus::fwd::is_equal(std::string{"history"}))) {
