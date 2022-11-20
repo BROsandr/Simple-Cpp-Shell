@@ -106,6 +106,7 @@ int main() {
               fplus::fwd::flip::elem_at_idx(command_history));
         } else {
           std::cout << "No such command in command history" << std::endl;
+          continue;
         }
       } else {
         command_to_execute = fplus::join(std::string{' '}, input_split);
