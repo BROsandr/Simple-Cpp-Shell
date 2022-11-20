@@ -63,7 +63,8 @@ int main() {
           fplus::fwd::transform([](const auto &arg) {
             return fplus::show(fplus::fst(arg)) + fplus::snd(arg);
           }),
-          fplus::fwd::show());
+          fplus::fwd::show_cont_with_frame("\n", "", ""));
+      std::cout << std::endl;
     } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 2),
                                  fplus::fwd::is_equal(std::string{"!!"}))) {
