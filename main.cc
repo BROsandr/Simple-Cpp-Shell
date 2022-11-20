@@ -15,7 +15,6 @@ void exit() { std::exit(EXIT_SUCCESS); }
 } // namespace shell
 
 int main() {
-  std::vector<std::string> entered_input;
   std::vector<std::string> command_history;
 
   std::function<void(void)> check_command_history_emptiness{
@@ -64,7 +63,8 @@ int main() {
             return fplus::show(fplus::fst(arg)) + fplus::snd(arg);
           }),
           fplus::fwd::show_cont_with_frame("\n", "", ""));
-      std::cout << std::endl;
+      if (fplus::is_not_empty(command_history))
+        std::cout << std::endl;
     } else if (fplus::fwd::apply(input_split, fplus::fwd::head(),
                                  fplus::fwd::get_segment(0, 2),
                                  fplus::fwd::is_equal(std::string{"!!"}))) {
